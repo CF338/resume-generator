@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高颜值简历生成器 - 为应届生打造专业简历</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 28px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        button.active {
+            background: #3498db;
+            color: white;
+        }
+
+        button:not(.active) {
+            background: #ecf0f1;
+            color: #333;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Form Section */
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Preview Section */
+        .preview-section {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-height: 800px;
+            overflow-y: auto;
+        }
+
+        .preview-section h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .resume-preview {
+            border-left: 4px solid #3498db;
+            padding-left: 20px;
+        }
+
+        .resume-preview h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .resume-preview .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .resume-preview .section {
+            margin-bottom: 25px;
+        }
+
+        .resume-preview .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .resume-preview .section-content {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .resume-preview .entry {
+            margin-bottom: 15px;
+        }
+
+        .resume-preview .entry-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .resume-preview .entry-subtitle {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .resume-preview .entry-description {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .skills-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            background: #e8f4f8;
+            color: #3498db;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .action-buttons button {
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #229954;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        /* Hidden sections */
+        .hidden {
+            display: none;
+        }
+
+        /* Success message */
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state svg {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .form-section,
+            .tab-buttons,
+            header,
+            .action-buttons {
+                display: none;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .preview-section {
+                box-shadow: none;
+                max-height: none;
+                overflow: visible;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>📄 高颜值简历生成器</h1>
+            <div class="tab-buttons">
+                <button class="active" onclick="switchTab('edit')">编辑</button>
+                <button onclick="switchTab('preview')">预览</button>
+                <button onclick="downloadPDF()">📥 下载PDF</button>
+                <button onclick="clearData()" class="btn-danger" style="background: #e74c3c; color: white;">清空</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Edit Section -->
+            <div id="edit-section" class="form-section">
+                <h2>编辑简历</h2>
+                <div id="success-msg" class="success-message hidden">✓ 简历已自动保存</div>
+
+                <!-- Basic Info -->
+                <h3 style="margin-top: 20px; margin-bottom: 15px; color: #3498db; font-size: 16px;">基本信息</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>姓名</label>
+                        <input type="text" id="fullName" placeholder="张三" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>年龄</label>
+                        <input type="number" id="age" placeholder="22" oninput="updatePreview()">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>电话</label>
+                        <input type="text" id="phone" placeholder="13800138000" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>邮箱</label>
+                        <input type="email" id="email" placeholder="zhangsan@example.com" oninput="updatePreview()">
+                    </div>
+                </div>
+
+                <!-- Education -->
+                <h3 style="margin-top: 20px; margin-bottom: 15px; color: #3498db; font-size: 16px;">教育背景</h3>
+                <div class="form-group">
+                    <label>大学名称</label>
+                    <input type="text" id="university" placeholder="清华大学" oninput="updatePreview()">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>专业</label>
+                        <input type="text" id="major" placeholder="电子信息工程" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>学位</label>
+                        <input type="text" id="degree" placeholder="本科" oninput="updatePreview()">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>毕业年份</label>
+                        <input type="number" id="graduationYear" placeholder="2024" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>GPA</label>
+                        <input type="text" id="gpa" placeholder="3.8/4.0" oninput="updatePreview()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>主修课程</label>
+                    <textarea id="coursework" placeholder="通信原理、移动通信、计算机网络..." oninput="updatePreview()"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>荣誉奖项</label>
+                    <textarea id="honors" placeholder="国家励志奖学金、优秀学生干部..." oninput="updatePreview()"></textarea>
+                </div>
+
+                <!-- Internship -->
+                <h3 style="margin-top: 20px; margin-bottom: 15px; color: #3498db; font-size: 16px;">实习经历</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>公司名称</label>
+                        <input type="text" id="internshipCompany" placeholder="中国移动" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>职位</label>
+                        <input type="text" id="internshipPosition" placeholder="网络运维实习生" oninput="updatePreview()">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>开始时间</label>
+                        <input type="text" id="internshipStartDate" placeholder="2024-01" oninput="updatePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>结束时间</label>
+                        <input type="text" id="internshipEndDate" placeholder="2024-03" oninput="updatePreview()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>工作描述</label>
+                    <textarea id="internshipDescription" placeholder="参与网络设备的日常维护、故障排查等工作..." oninput="updatePreview()"></textarea>
+                </div>
+
+                <!-- Skills -->
+                <h3 style="margin-top: 20px; margin-bottom: 15px; color: #3498db; font-size: 16px;">专业技能</h3>
+                <div class="form-group">
+                    <label>技能（用逗号分隔）</label>
+                    <textarea id="skills" placeholder="TCP/IP, Linux, Python, 路由交换..." oninput="updatePreview()"></textarea>
+                </div>
+
+                <!-- Certificates -->
+                <h3 style="margin-top: 20px; margin-bottom: 15px; color: #3498db; font-size: 16px;">证书资格</h3>
+                <div class="form-group">
+                    <label>证书（用逗号分隔）</label>
+                    <textarea id="certificates" placeholder="英语四级、HCIA..." oninput="updatePreview()"></textarea>
+                </div>
+
+                <!-- Self Evaluation -->
+                <h3 style="margin-top: 20px; margin-bottom: 15px; color: #3498db; font-size: 16px;">自我评价</h3>
+                <div class="form-group">
+                    <label>自我评价</label>
+                    <textarea id="selfEvaluation" placeholder="作为一名电子信息工程专业的应届本科毕业生..." oninput="updatePreview()"></textarea>
+                </div>
+            </div>
+
+            <!-- Preview Section -->
+            <div id="preview-section" class="preview-section">
+                <h2>简历预览</h2>
+                <div id="resume-content" class="empty-state">
+                    <p>开始填写左侧表单，预览将实时显示</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn-primary" onclick="saveData()">💾 保存到本地</button>
+            <button class="btn-secondary" onclick="loadData()">📂 从本地加载</button>
+            <button class="btn-secondary" onclick="downloadPDF()">📥 下载为PDF</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize
+        window.addEventListener('load', () => {
+            loadData();
+            updatePreview();
+        });
+
+        // Tab switching
+        function switchTab(tab) {
+            const editSection = document.getElementById('edit-section');
+            const previewSection = document.getElementById('preview-section');
+            const buttons = document.querySelectorAll('.tab-buttons button');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (tab === 'edit') {
+                editSection.style.display = 'block';
+                previewSection.style.display = 'none';
+            } else {
+                editSection.style.display = 'none';
+                previewSection.style.display = 'block';
+            }
+        }
+
+        // Update preview
+        function updatePreview() {
+            const data = getFormData();
+            const html = generateResumeHTML(data);
+            document.getElementById('resume-content').innerHTML = html;
+            saveData();
+            showSuccessMessage();
+        }
+
+        // Get form data
+        function getFormData() {
+            return {
+                fullName: document.getElementById('fullName').value,
+                age: document.getElementById('age').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                university: document.getElementById('university').value,
+                major: document.getElementById('major').value,
+                degree: document.getElementById('degree').value,
+                graduationYear: document.getElementById('graduationYear').value,
+                gpa: document.getElementById('gpa').value,
+                coursework: document.getElementById('coursework').value,
+                honors: document.getElementById('honors').value,
+                internshipCompany: document.getElementById('internshipCompany').value,
+                internshipPosition: document.getElementById('internshipPosition').value,
+                internshipStartDate: document.getElementById('internshipStartDate').value,
+                internshipEndDate: document.getElementById('internshipEndDate').value,
+                internshipDescription: document.getElementById('internshipDescription').value,
+                skills: document.getElementById('skills').value,
+                certificates: document.getElementById('certificates').value,
+                selfEvaluation: document.getElementById('selfEvaluation').value
+            };
+        }
+
+        // Generate resume HTML
+        function generateResumeHTML(data) {
+            if (!data.fullName && !data.university && !data.internshipCompany) {
+                return '<p style="text-align: center; color: #999; padding: 40px 20px;">开始填写左侧表单，预览将实时显示</p>';
+            }
+
+            let html = '<div class="resume-preview">';
+
+            // Header
+            html += `<h1>${data.fullName || '姓名'}</h1>`;
+            
+            // Contact info
+            const contacts = [];
+            if (data.phone) contacts.push(`📱 ${data.phone}`);
+            if (data.email) contacts.push(`📧 ${data.email}`);
+            if (data.age) contacts.push(`👤 ${data.age}岁`);
+            
+            if (contacts.length > 0) {
+                html += `<div class="contact-info">${contacts.join('')}</div>`;
+            }
+
+            // Self evaluation
+            if (data.selfEvaluation) {
+                html += `<div class="section">
+                    <div class="section-title">自我评价</div>
+                    <div class="section-content">${data.selfEvaluation}</div>
+                </div>`;
+            }
+
+            // Education
+            if (data.university) {
+                html += `<div class="section">
+                    <div class="section-title">教育背景</div>
+                    <div class="entry">
+                        <div class="entry-title">${data.university}</div>
+                        <div class="entry-subtitle">${data.major || ''} · ${data.degree || ''} ${data.graduationYear ? `(${data.graduationYear}年)` : ''}</div>`;
+                
+                if (data.gpa) {
+                    html += `<div class="entry-subtitle">GPA: ${data.gpa}</div>`;
+                }
+                
+                if (data.coursework) {
+                    html += `<div class="entry-description"><strong>主修课程:</strong> ${data.coursework}</div>`;
+                }
+                
+                if (data.honors) {
+                    html += `<div class="entry-description"><strong>荣誉奖项:</strong> ${data.honors}</div>`;
+                }
+                
+                html += `</div></div>`;
+            }
+
+            // Internship
+            if (data.internshipCompany) {
+                html += `<div class="section">
+                    <div class="section-title">实习经历</div>
+                    <div class="entry">
+                        <div class="entry-title">${data.internshipCompany} · ${data.internshipPosition || ''}</div>`;
+                
+                if (data.internshipStartDate || data.internshipEndDate) {
+                    html += `<div class="entry-subtitle">${data.internshipStartDate || ''} ~ ${data.internshipEndDate || ''}</div>`;
+                }
+                
+                if (data.internshipDescription) {
+                    html += `<div class="entry-description">${data.internshipDescription}</div>`;
+                }
+                
+                html += `</div></div>`;
+            }
+
+            // Skills
+            if (data.skills) {
+                const skillsList = data.skills.split(',').map(s => s.trim()).filter(s => s);
+                if (skillsList.length > 0) {
+                    html += `<div class="section">
+                        <div class="section-title">专业技能</div>
+                        <div class="skills-tags">`;
+                    
+                    skillsList.forEach(skill => {
+                        html += `<span class="skill-tag">${skill}</span>`;
+                    });
+                    
+                    html += `</div></div>`;
+                }
+            }
+
+            // Certificates
+            if (data.certificates) {
+                const certsList = data.certificates.split(',').map(c => c.trim()).filter(c => c);
+                if (certsList.length > 0) {
+                    html += `<div class="section">
+                        <div class="section-title">证书资格</div>
+                        <div class="section-content">`;
+                    
+                    certsList.forEach(cert => {
+                        html += `<div style="margin-bottom: 8px;">✓ ${cert}</div>`;
+                    });
+                    
+                    html += `</div></div>`;
+                }
+            }
+
+            html += '</div>';
+            return html;
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            const data = getFormData();
+            localStorage.setItem('resumeData', JSON.stringify(data));
+        }
+
+        // Load data from localStorage
+        function loadData() {
+            const saved = localStorage.getItem('resumeData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                Object.keys(data).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = data[key];
+                    }
+                });
+            }
+        }
+
+        // Show success message
+        function showSuccessMessage() {
+            const msg = document.getElementById('success-msg');
+            msg.classList.remove('hidden');
+            setTimeout(() => {
+                msg.classList.add('hidden');
+            }, 2000);
+        }
+
+        // Clear data
+        function clearData() {
+            if (confirm('确定要清空所有数据吗？')) {
+                localStorage.removeItem('resumeData');
+                document.querySelectorAll('input, textarea').forEach(el => el.value = '');
+                updatePreview();
+            }
+        }
+
+        // Download PDF
+        function downloadPDF() {
+            const element = document.getElementById('resume-content');
+            const opt = {
+                margin: 10,
+                filename: '简历.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+            };
+
+            // Check if html2pdf is available
+            if (typeof html2pdf !== 'undefined') {
+                html2pdf().set(opt).from(element).save();
+            } else {
+                // Fallback: use browser print
+                window.print();
+            }
+        }
+    </script>
+
+    <!-- html2pdf library for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</body>
+</html>
